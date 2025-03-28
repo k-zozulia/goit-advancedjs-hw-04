@@ -29,6 +29,17 @@ elements.form.addEventListener('submit', async (event) => {
     totalHits = imagesData.totalHits;
     renderImages(imagesData);
     
+    if (elements.gallery.children.length > 0) {
+      const header = document.querySelector('header');
+      const headerHeight = header ? header.offsetHeight : 0;
+      const galleryPosition = elements.gallery.getBoundingClientRect().top + window.scrollY;
+      
+      window.scrollTo({
+        top: galleryPosition - headerHeight - 20,
+        behavior: 'smooth'
+      });
+    }
+    
     if (totalHits > 15) {
       elements.loadMoreBtn.style.display = 'block';
     } else if (imagesData.hits.length > 0 && imagesData.hits.length === totalHits) {
@@ -49,7 +60,20 @@ elements.loadMoreBtn.addEventListener('click', async () => {
   
   try {
     const imagesData = await fetchImagesFromAPI(currentQuery, currentPage);
-    renderImages(imagesData, true);
+    const scrollHeight = renderImages(imagesData, true);
+    
+    if (scrollHeight) {
+      const galleryWidth = elements.gallery.clientWidth;
+      const cardWidth = 358;
+      const gap = 24;
+      const cardsPerRow = Math.floor((galleryWidth + gap) / (cardWidth + gap));
+      const newRows = Math.ceil(imagesData.hits.length / cardsPerRow);
+      
+      window.scrollBy({
+        top: scrollHeight * newRows,
+        behavior: 'smooth'
+      });
+    }
     
     const loadedItems = currentPage * 15;
     if (loadedItems >= totalHits) {

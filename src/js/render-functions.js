@@ -13,7 +13,7 @@ function renderImages({ totalHits, hits }, append = false) {
 
   if (hits.length === 0) {
     handleError('Sorry, there are no images matching your search query. Please try again!');
-    return;
+    return null;
   }
 
   hits.forEach(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }, index) => {
@@ -73,6 +73,15 @@ function renderImages({ totalHits, hits }, append = false) {
   } else {
     lightboxInstance.refresh();
   }
+
+  if (galleryContainer.children.length > 0) {
+    const firstCard = galleryContainer.children[0];
+    const cardRect = firstCard.getBoundingClientRect();
+    const galleryStyle = window.getComputedStyle(galleryContainer);
+    const gap = parseInt(galleryStyle.gap) || 24;
+    return cardRect.height + gap;
+  }
+  return 0;
 }
 
 export { renderImages };
