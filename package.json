@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build --base=/goit-advancedjs-hw-04/",
     "preview": "vite preview",
-    "deploy" : "gh-pages -d dist -f"
+    "deploy": "gh-pages -d dist -f"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
